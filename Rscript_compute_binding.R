@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
 
+# Load transition and emission files
 tr = read.delim("transitions.txt", '\t', header = T)
 em = read.delim("emissions.txt", '\t', header = T)
 
@@ -11,8 +12,9 @@ rownames(em) = states
 
 bases = colnames(em)
 
-#apply(em, 1, max)
-#paste(bases[apply(em, 1, which.max)][2:18], collapse='')
+# Print out the probabilities and string
+#apply(em, 1, max)[1:14]
+#paste(bases[apply(em, 1, which.max)][1:14], collapse='')
 
 seq = read.delim("seq.fa")
 
@@ -21,8 +23,11 @@ s = unlist(strsplit(paste(seq), ''))
 
 library(HMM)
 
+# Train the HMM
 hmm = initHMM(states, bases, transProbs = data.matrix(tr), emissionProbs = data.matrix(em))
 
+
+# Find the viterbi solution to sequence file
 options(max.print=9999999)
 viterbi(hmm, s)
 
